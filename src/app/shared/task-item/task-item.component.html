@@ -1,0 +1,36 @@
+<ion-item-sliding>
+
+  <ion-item-options side='start'>
+    <ion-item-option color='danger' (click)='taskService.deleteTask(task.id)'>
+      <ion-icon slot="icon-only" name='trash'></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+
+
+  <ion-item (click)="router.navigate(['task', task.id], {relativeTo: activatedRoute})">
+    <ion-label>
+      <!--
+      The double curly braces allow for JavaScript code te be executed or for
+      variables to be read. The executed JavaScript code must be a function that
+      returns something that can be converted to a string.
+      -->
+      {{task.name}}
+    </ion-label>
+
+    <!--
+    The following uses a conditional directive, this allows us to display a
+    filled checkmark when the task is done and an outline when the task isn't
+    yet finished.
+
+    The directive accepts any expression that results in a boolean value,
+    this could be a variable or a function that returns a truthy value.
+
+    The icons can be found at https://ionicons.com/.
+    -->
+    <ion-icon *ngIf='task.done' name='checkmark-circle'
+              color='success' (click)='taskService.toggleTaskStatus(task.id)'></ion-icon>
+    <ion-icon *ngIf='!task.done' name='checkmark'
+              (click)='taskService.toggleTaskStatus(task.id)'></ion-icon>
+  </ion-item>
+
+</ion-item-sliding>

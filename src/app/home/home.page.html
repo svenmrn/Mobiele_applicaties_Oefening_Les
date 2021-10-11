@@ -1,0 +1,65 @@
+<ion-header [translucent]='true'>
+  <ion-toolbar>
+    <ion-title>
+      To-Do
+    </ion-title>
+<!-- (ionChange)='changeFilter($event)' -->
+    <ion-select class="ion-padding-horizontal" interface="popover"
+                slot='end' [(ngModel)]='selectedFilter'>
+      <ion-select-option *ngFor='let f of filters' [value]="f">
+        {{f}}
+      </ion-select-option>
+    </ion-select>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]='true'
+             [scrollEvents]='true'
+             (ionScrollStart)="logScrollStart()"
+             (ionScrollEnd)="logScrollEnd()">
+  <ion-header collapse='condense'>
+    <ion-toolbar>
+      <ion-title size='large'>To-Do</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!--
+  The location of the button in the UI is determined by the vertical and
+  horizontal attributes, not by the position of the FAB in the HTML template.
+
+  slot='fixed' ensures that the button doesn't move when the content of the page
+  is scrolled.
+
+  The value for the attribute vertical is retrieved from the logic file via
+  databinding. The square brackets indicate that the value must be retrieved from
+  the TypeScript logic file. Should the value of the variable change, the button
+  will be repositioned according to the new value.
+  -->
+  <ion-fab *ngIf='fabIsVisible' [vertical]='verticalFabPosition' horizontal='end' slot='fixed'>
+    <!--
+    Note that the path for the routerLink directive is by default relative
+    to the current page, the path of the current page is automatically added
+    in front of the path that is passed to the directive.
+
+    If a full path is required, the first element in the list should start with
+    a forward slash.
+    -->
+    <ion-fab-button [routerLink]="['/home', 'task']">
+      <ion-icon name='add' ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list lines='full'>
+    <!--
+    The *ngFor directive allows for iteration over a array or other
+    iterable object. The iteration variable task can be used within the confines
+    of the tag which contains the *ngFor.
+    <app-task-item> Is a custom component defined in /shared/task-item/*
+    -->
+    <app-task-item
+      *ngFor='let t of taskService.getFilteredTasks(selectedFilter)'
+      [task]='t'>
+    </app-task-item>
+  </ion-list>
+</ion-content>

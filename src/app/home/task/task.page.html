@@ -1,0 +1,88 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{title}}</ion-title>
+
+    <ion-buttons slot="start">
+
+      <!--
+      Option 1: Hardcode the URL to go back to the previous page.
+      This works but is difficult when the page can be reached from multiple
+      other pages, it then become difficult to determine where the user needs
+      to go back to.
+      --->
+      <!--
+      <ion-button [routerLink]="['/']">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+      -->
+
+      <!--
+      Option 2: Inject the NavController in the TypeScript file and use the
+      back() method to go back to the previous location.
+      This is better, but doesn't take platform specific guidelines into account.
+      -->
+      <!--
+      <ion-button (click)="navController.back();">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+      -->
+
+      <!--
+      Option 3: Use an ionic component. This is the best option since this
+      Ionic component is automatically styled according to the user's platform.
+      The defaultHref attribute must added in case that there isn't any
+      other page in the navigation stack. This can happen during testing, but
+      shouldn't happen in a production build.
+      -->
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="handleCreateAndUpdate()">
+        <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-item lines="full" class="ion-margin-top">
+    <!--
+    The [(ngModel)] directive ensures 2-way databinding, it is a combination
+    of event en property binding. The square brackets indicate property binding
+    and ensure that the data that is stored in the TypeScript logic file in the
+    variable taskName is displayed in the form. The parentheses indicate event
+    binding and ensure that the changed that are made by the user in the UI,
+    are stored in the variable taskName in the TypeScript logic file.
+    -->
+    <ion-input placeholder="Name" type="text"
+               [(ngModel)]='taskName'></ion-input>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-label>Deadline</ion-label>
+    <!--
+    See https://ionicframework.com/docs/api/datetime for more info about the
+    datepicker. This code might no longer work if you try to replicate this
+    with Ionic V6 because a new datepicker will be included in this version.
+    The following code is based on Ionic V5.
+    -->
+    <ion-datetime [yearValues]="yearValues" display-format="YYYY-MM-DD"
+                  [(ngModel)]='deadline'>
+      Datum
+    </ion-datetime>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-textarea cols="20" rows="8" placeholder="Description"
+                  [(ngModel)]='description'>
+    </ion-textarea>
+  </ion-item>
+
+    <ion-item *ngFor="let label of labelService.getAllLabels()">
+      <ion-label [color]="label.getColor()">{{label.name}}</ion-label>
+      <ion-checkbox (ionChange)="changeLabels($event, label)" checked="checkLabel(label)" [color]="label.getColor()" slot="start"></ion-checkbox>
+    </ion-item>
+
+</ion-content>
